@@ -3,6 +3,34 @@ import pyttsx3
 import pywhatkit
 import datetime
 import wikipedia
+from flask import Flask
+
+from pandas import read_csv
+import pandas as pd
+import matplotlib.pyplot as plt
+from pandas.plotting import scatter_matrix
+from matplotlib import pyplot
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_predict
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+import numpy as np
+
+import random
+
+
+Spotifylist = pd.read_csv("data.csv", engine='python')
+
+
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 analyser = SentimentIntensityAnalyzer()
@@ -14,10 +42,6 @@ def sentiment_analyzer_scores(sentence):
     global scoreavg
     scoreavg = score['compound']
 
-
-
-
-
 listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
@@ -25,6 +49,8 @@ engine.setProperty('voice', voices[0].id)
 
 def talk(text):
     engine.say(text)
+    newVoiceRate = 178
+    engine.setProperty('rate', newVoiceRate)
     engine.runAndWait()
 
 
@@ -32,6 +58,7 @@ def take_command():
     try:
         with sr.Microphone() as source:
             print('How do you feel?')
+            talk('How do you feel')
             voice = listener.listen(source)
             command = listener.recognize_google(voice)
             command = command.lower()
@@ -42,26 +69,16 @@ def take_command():
         pass
     return command
 
-
 def run_Ron():
     command = take_command()
     sentiment_analyzer_scores(command)
-    if scoreavg < -0.5:
-        song = ('Sad')
-        talk('Playing a sad song to empthasie with you')
-        pywhatkit.playonyt(song)
-    elif scoreavg <0:
-        song = ('mood')
-        talk('Playing a mooding song to feel realy moody')
-        pywhatkit.playonyt(song)
-    elif scoreavg <0.5:
-        song = ('Normal')
-        talk('Playing a normal song because you are normal')
-        pywhatkit.playonyt(song)
-    else:
-        song = ('happy')
-        talk('Playing a happy song because you love life')
-        pywhatkit.playonyt(song)
+    dancescore = scoreavg + 0.5
+    dancescore = float("{:.3f}".format(dancescore))
+    song = Spotifylist['artists'].where(Spotifylist['danceability'] == dancescore).notnull()
+    list = song.index[song == True].tolist()
+    Stringsong = str(Spotifylist['artists'].iloc[random.choice(list)]) + str(Spotifylist['name'].iloc[random.choice(list)])
+    pywhatkit.playonyt(Stringsong)
 
 
 run_Ron()
+
