@@ -4,7 +4,7 @@ This is a talking chatbot that recommonds a song based on the mood of the way yo
 
 ### Prerequisites
 I have used Pycharm as my coding environment (the community version).
-Link: https://www.jetbrains.com/pycharm/download/#section=windows
+ 
 ### Installing
 It is important to install every library you are importing. You are using 'pip install' and then add the specific library to it. For example: pip install pyttsx3. You write this in the terminal at Pycharm and just enter. 
 
@@ -31,6 +31,7 @@ https://stackoverflow.com/
 https://github.com/ProgrammingHero1/romantic-alexa
 https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks
 https://analyticsindiamag.com/sentiment-analysis-made-easy-using-vader/
+https://www.jetbrains.com/pycharm/download/#section=windows
 
 ### Authors
 Eray Boynuince - Student at the University of Antwerp
